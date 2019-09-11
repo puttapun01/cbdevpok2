@@ -590,7 +590,7 @@ function sendGenericMessage(recipientId) {
             buttons: [{
               type: "web_url",
               url: "https://www.oculus.com/en-us/rift/",
-              title: "เปิดลิ้งค์"
+              title: "ยิงเลย"
             }, {
               type: "postback",
               title: "ติดต่อสอบถาม",
