@@ -1,144 +1,36 @@
-# Original Coast Clothing Messenger Bot
+# Messenger Platform Sample -- node.js
 
-Original Coast Clothing (OC) is a fictional clothing brand created to showcase key features of the Messenger Platform. OC leverages key features to deliver a great customer experience. Using this demo as inspiration, you can create a delightful messaging experience that leverages both automation and live customer support. We are also providing the open source code of the app and a guide to deploy the experience on your local environment or remote server.
+This project is an example server for Messenger Platform built in Node.js. With this app, you can send it messages and it will echo them back to you. You can also see examples of the different types of Structured Messages. 
 
-[Access the Messenger experience](https://m.me/OriginalCoastClothing?ref=GITHUB)
+It contains the following functionality:
 
-![Messenger Experience](public/experience.png)
+* Webhook (specifically for Messenger Platform events)
+* Send API 
+* Web Plugins
+* Messenger Platform v1.1 features
 
-See the [Developer Documentations on this experience](https://developers.facebook.com/docs/messenger-platform/getting-started/sample-apps/original-coast-clothing).
+Follow the [walk-through](https://developers.facebook.com/docs/messenger-platform/quickstart) to learn about this project in more detail.
 
-# Setting up your Messenger App
+## Setup
 
-## Requirements
+Set the values in `config/default.json` before running the sample. Descriptions of each parameter can be found in `app.js`. Alternatively, you can set the corresponding environment variables as defined in `app.js`.
 
-- **Facebook Page:** Will be used as the identity of your messaging experience. When people chat with your page. To create a new Page, visit https://www.facebook.com/pages/create.
-- **Facebook Developer Account:** Required to create new apps, which are the core of any Facebook integration. You can create a new developer account by going to the [Facebook Developers website](https://developers.facebook.com/) and clicking the "Get Started" button.
-- **Facebook App:** Contains the settings for your Messenger automation, including access tokens. To create a new app, visit your [app dashboard](https://developers.facebook.com/apps).
+Replace values for `APP_ID` and `PAGE_ID` in `public/index.html`.
 
-## Setup Steps
+## Run
 
-Before you begin, make sure you have completed all of the requirements listed above. At this point you should have a Page and a registered Facebook App.
+You can start the server by running `npm start`. However, the webhook must be at a public URL that the Facebook servers can reach. Therefore, running the server locally on your machine will not work.
 
-#### Get the App id and App Secret
+You can run this example on a cloud service provider like Heroku, Google Cloud Platform or AWS. Note that webhooks must have a valid SSL certificate, signed by a certificate authority. Read more about setting up SSL for a [Webhook](https://developers.facebook.com/docs/graph-api/webhooks#setup).
 
-1. Go to your app Basic Settings, [Find your app here](https://developers.facebook.com/apps)
-2. Save the **App ID** number and the **App Secret**
+## Webhook
 
-#### Grant  Messenger access to your Facebook App
+All webhook code is in `app.js`. It is routed to `/webhook`. This project handles callbacks for authentication, messages, delivery confirmation and postbacks. More details are available at the [reference docs](https://developers.facebook.com/docs/messenger-platform/webhook-reference).
 
-1. Go to your app Dashboard
-2. Under Add Product find Messenger and click Set Up
-3. Now you should be in the App Messenger Settings
-4. Under Access Tokens, click on Edit Permissions
-5. Select the desired page and allow Manage and access Page conversations in Messenger
-6. Select the desired page and an access token should appear
-7. Get the Page ID from the page access token by using the [Access Token Debugger](https://developers.facebook.com/tools/debug/accesstoken/)
-8. In the section Built-In NLP, select your page and enable the toggle
+## "Send to Messenger" and "Message Us" Plugin
 
-# Installation
-
-Clone this repository on your local machine:
-
-```bash
-$ git clone git@github.com:fbsamples/original-coast-clothing.git
-$ cd original-coast-clothing
-```
-
-You will need:
-
-- [Node](https://nodejs.org/en/) 10.x or higher
-- [Localtunnel](https://github.com/localtunnel/localtunnel) or remote server like [Heroku](https://www.heroku.com/)
-
-# Usage
-
-## Using Local Tunnel
-
-#### 1. Install the dependencies
-
-```bash
-$ npm install
-```
-
-Alternatively, you can use [Yarn](https://yarnpkg.com/en/):
-
-```bash
-$ yarn install
-```
-
-#### 2. Install Local Tunnel
-```bash
-npm install -g localtunnel
-```
-
-Open a new terminal tab and request a tunnel to your local server with your preferred port
-```bash
-lt --port 3000
-```
-
-#### 3. Rename the file `.sample.env` to `.env`
-
-```bash
-mv .sample.env .env
-```
-
- Edit the `.env` file to add all the values for your app and page. Then run your app locally using the built-in web server
-
-#### 4. Run your app locally using the built-in web server<
-
-```bash
-node app.js
-```
-
-You should now be able to access the application in your browser at [http://localhost:3000](http://localhost:3000)
-
-#### 5. Configure your webhook subcription and set the Messenger profile
-
-Use the `VERIFY_TOKEN` that you created in `.env` file and call the **/profile** endpoint like so:
-```
-http://localhost:3000/profile?mode=all&verify_token=verify-token
-```
-
-#### 6. Test that your app setup is successful
-
-Send a message to your Page from Facebook or in Messenger, if your webhook receives an event, you have fully set up your app! Voilà!
-
-## Using Heroku
-#### 1. Install the Heroku CLI
-
-Download and install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
-
-#### 2. Create an app from the CLI
-
-```bash
-git init
-heroku apps:create
-# Creating app... done, ⬢ mystic-wind-83
-# Created http://mystic-wind-83.herokuapp.com/ | git@heroku.com:mystic-wind-83.git
-```
-
-#### 3. Deploy the code
-```bash
-git add .
-git commit -m "My first commit"
-git push heroku master
-```
-
-#### 4. Set your environment variables
-  In your Heroku App Dashboard [https://dashboard.heroku.com/apps/mystic-wind-83](https://dashboard.heroku.com/apps/mystic-wind-83) set up the config vars following the comments in the file ```.sample.env```
-
-#### 5. Configure your webhook subscription and set the Messenger profile
-  You should now be able to access the application. Use the ```VERIFY_TOKEN``` that you created as config vars and call the **/profile** endpoint like so:
-
-  ```
-  http://mystic-wind-83.herokuapp.com/profile?mode=all&verify_token=verify-token
-  ```
-
-#### 6. Test that your app setup is successful
-
-  Send a message to your Page from Facebook or in Messenger, if your webhook receives an event, you have fully set up your app! Voilà!
+An example of the "Send to Messenger" plugin and "Message Us" plugin are located at `index.html`. The "Send to Messenger" plugin can be used to trigger an authentication event. More details are available at the [reference docs](https://developers.facebook.com/docs/messenger-platform/plugin-reference).
 
 ## License
-Sample Messenger App Original Coast Clothing is BSD licensed, as found in the LICENSE file.
 
-See the [CONTRIBUTING](CONTRIBUTING.md) file for how to help out.
+See the LICENSE file in the root directory of this source tree. Feel free to use and modify the code.
